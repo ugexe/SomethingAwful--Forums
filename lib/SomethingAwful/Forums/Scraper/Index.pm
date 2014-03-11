@@ -34,7 +34,7 @@ sub new {
                 $result =~ tr/,//d;
                 return $result;
             },
-            post_count => sub { 
+            post_count   => sub { 
                 my $result = $_[0]->as_text =~ s{^.*?([\d,]+) total posts.*?$}{$1}ir;
                 $result =~ tr/,//d;
                 return $result;
@@ -46,7 +46,7 @@ sub new {
                 $result =~ tr/,//d;
                 return $result;
             },
-            archived_post_count => sub { 
+            archived_post_count   => sub { 
                 my $result = $_[0]->as_text =~ s{^.*?([\d,]+) archived posts.*?$}{$1}ir;
                 $result =~ tr/,//d;
                 return $result;            
