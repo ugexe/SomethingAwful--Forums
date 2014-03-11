@@ -66,7 +66,7 @@ sub new {
 
         process '//div[@class="mainbodytextsmall"][contains(text(), "Hello, ")]//a[1]', 
             logged_in_as_username => 'TEXT',
-            logged_in_as_id => sub {
+            logged_in_as_id       => sub {
                 return ($_[0]->attr('href') =~ s{^.*?userid=(\d+).*?$}{$1}ir);     
             };
 
