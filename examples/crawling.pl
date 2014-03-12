@@ -51,10 +51,24 @@ if( exists $scraped_index->{logged_in_as_username} ) {
 }
 
 
+use Data::Dumper;
+say Dumper($scraped_index);
+die;
 # Do some processing on the data (gather forum data & process the first forums first page of threads)
 foreach my $forum ( @{$scraped_index->{forums}} ) {
-    use Data::Dumper;
-    say Dumper($forum);
+
+    foreach my $thread ( @{$forum->{threads}} ) {
+        say $forum->{name};
+
+        foreach my $post ( @{$thread->{posts}} ) {
+            say $post->{title};
+
+            last;
+        }
+
+        last;
+    }
+
     last;
 }
 

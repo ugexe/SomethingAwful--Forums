@@ -73,7 +73,7 @@ sub login {
 sub fetch_forums {
     my $self = shift;
 
-    $self->get( $self->base_url );
+    $self->mech->get( $self->base_url );
     return $self->index_scraper->scrape( $self->mech->content, $self->mech->base );
 }
 
