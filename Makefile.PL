@@ -14,14 +14,15 @@ WriteMakefile (
     LICENSE        => 'perl',
     MIN_PERL_VERSION => '5.010',
     PREREQ_PM      => {
-    'Web::Scraper'              => 0,
-    'WWW::Mechanize'            => 0,
-    'Web::Scraper::LibXML'      => 0, # These 2 can be subbed out for just Web::Scraper
-    'HTML::TreeBuilder::LibXML' => 0, # but its slower. Figure out how to do this automatically.
-    'Regexp::Common'            => 0,
+        'Web::Scraper'              => 0,
+        'WWW::Mechanize'            => 0,
+        'Web::Scraper::LibXML'      => 0, # These 2 can be subbed out for just Web::Scraper
+        'HTML::TreeBuilder::LibXML' => 0, # but its slower. Figure out how to do this automatically.
+        'Regexp::Common'            => 0,
+        'Moose'                     => 0,
     },
     BUILD_REQUIRES => {
-    'Test::More'        => 0,
+        'Test::More'        => 0,
     },
     META_MERGE => {
         resources => {
@@ -29,15 +30,15 @@ WriteMakefile (
             bugtracker => "$bugs",
         },
         provides => {
-            'Web::Scraper::SomethingAwful::Forums::Index' => {
+            'SomethingAwful::Forums::Scraper::Index' => {
                 file    => 'lib/SomethingAwful::Forums::Scraper::Index.pm',
                 version => '0.01',
             },
-            'Web::Scraper::SomethingAwful::Forums::Forum' => {
+            'SomethingAwful::Forums::Scraper::Forum' => {
                 file    => 'lib/SomethingAwful::Forums::Scraper::Forum.pm',
                 version => '0.01',
             },
-            'Web::Scraper::SomethingAwful::Forums::Thread' => {
+            'SomethingAwful::Forums::Scraper::Thread' => {
                 file    => 'lib/SomethingAwful::Forums::Scraper::Thread.pm',
                 version => '0.01',
             },

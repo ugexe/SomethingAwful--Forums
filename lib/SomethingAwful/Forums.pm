@@ -40,7 +40,6 @@ has 'mech'     => (
             autocheck => 1,
         );
     },
-    handles => [qw( get content )],
 );
 
 has 'username' => ( 
