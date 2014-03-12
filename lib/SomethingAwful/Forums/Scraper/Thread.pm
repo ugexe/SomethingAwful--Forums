@@ -42,7 +42,7 @@ sub new {
                             return ($_[0]->attr('href') =~ s{^.*?#post(\d+).*?$}{$1}ir);
                         }; 
                     process '//td[@class="postdate"]//a[@class="user_jump"]', 
-                        posts_by_user_url => '@href';
+                        posts_by_user_uri => '@href';
                     process '//td[@class="postdate"]', 
                         date => sub {
                             my $text = $_[0]->as_text;
@@ -52,7 +52,7 @@ sub new {
                             return $text;
                         };
                     process '//ul[@class="profilelinks"]/li', 
-                        profile_urls => scraper {
+                        profile_uris => scraper {
                             process '//a[text()="Profile"]',      
                                 profile      => '@href'; 
                             process '//a[text()="Message"]',      
@@ -61,9 +61,9 @@ sub new {
                                 post_history => '@href'; 
                         };
                     process '//ul[@class="postbuttons"]//a[contains(@href, "modalert")]', 
-                        report_url => '@href';
+                        report_uri => '@href';
                     process '//ul[@class="postbuttons"]//a[contains(@href, "newreply")]', 
-                        reply_url => '@href';
+                        reply_uri => '@href';
 
             };
     };

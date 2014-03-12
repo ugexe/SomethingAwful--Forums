@@ -12,7 +12,7 @@ sub new {
             'subforums[]' => scraper {
                 process '//td[@class="title"]/a', 
                     title => 'TEXT', 
-                    url   => '@href', 
+                    uri   => '@href', 
                     id    => sub {
                         return ($_[0]->attr('href') =~ s{^.*forumid=(\d+).*?$}{$1}ir);
                     };
@@ -37,7 +37,7 @@ sub new {
                     unread    => 'TEXT';
                 process '//div[@class="info"]//a[@class="thread_title"]', 
                     title     => 'TEXT', 
-                    url       => '@href', 
+                    uri       => '@href', 
                     id        => sub {
                         return ( $_[0]->attr('href') =~ s{^.*?threadid=(\d+).*?$}{$1}ir );
                     };
@@ -70,7 +70,7 @@ sub new {
                             date   => 'TEXT';
                         process '//a[@class="author"]', 
                             author => 'TEXT', 
-                            url    => '@href';
+                            uri    => '@href';
                     };
 
             };

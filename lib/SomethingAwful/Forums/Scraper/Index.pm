@@ -80,14 +80,14 @@ sub new {
             };
 
         process '//a[contains(@href, "action=logout")]', 
-            logout_url => '@href';
+            logout_uri => '@href';
 
         # Forum specific data
         process '//tr[contains(@class, "forum")]', 
             'forums[]' => scraper {
                 # Main Forum
                 process '//td[@class="title"]//a[@class="forum"]', 
-                    url  => '@href', 
+                    uri  => '@href', 
                     name => 'TEXT', 
                     id   => sub { 
                         return ($_[0]->attr('href') =~ s{^.*forumid=(\d+).*?$}{$1}ir); 
@@ -96,7 +96,7 @@ sub new {
                 # Sub Forums
                 process '//td[@class="title"]//div[@class="subforums"]//a[contains(@class, "forum")]', 
                     'subforums[]' => { 
-                            url     => '@href', 
+                            uri     => '@href', 
                             name    => 'TEXT', 
                             id      => sub {
                                 return ($_[0]->attr('href') =~ m{forumid=\d+}i
@@ -112,7 +112,7 @@ sub new {
                 # Moderators
                 process '//td[@class="moderators"]//a', 
                     'moderators[]' => {
-                        url  => '@href',
+                        uri  => '@href',
                         name => 'TEXT',
                         id   => sub {
                             return ($_[0]->attr('href') =~ s{userid=(\d+)}{$1}ir);

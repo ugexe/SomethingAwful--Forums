@@ -20,6 +20,7 @@ WriteMakefile (
         'HTML::TreeBuilder::LibXML' => 0, # but its slower. Figure out how to do this automatically.
         'Regexp::Common'            => 0,
         'Moose'                     => 0,
+        'Method::Signatures'        => 0,
     },
     BUILD_REQUIRES => {
         'Test::More'        => 0,

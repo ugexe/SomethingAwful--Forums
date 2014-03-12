@@ -29,8 +29,10 @@ my $SA = SomethingAwful::Forums->new;
 
 say 'Starting...';
 if(defined $opt->username && defined $opt->password) {
-    $SA->('username' => $opt->username);
-    $SA->('password' => $opt->password);
+    $SA->login(
+        'username' => $opt->username,
+        'password' => $opt->password,
+    );
 }
 else {
     say 'No login credentials supplied. Not logging in.'
@@ -51,17 +53,16 @@ if( exists $scraped_index->{logged_in_as_username} ) {
 }
 
 
-use Data::Dumper;
-say Dumper($scraped_index);
-die;
 # Do some processing on the data (gather forum data & process the first forums first page of threads)
 foreach my $forum ( @{$scraped_index->{forums}} ) {
+    my $scraped_forum = $SA->fetch_threads( forum_id => 1);
 
-    foreach my $thread ( @{$forum->{threads}} ) {
-        say $forum->{name};
+    foreach my $thread ( @{$scraped_forum->{threads}} ) {
+        say $thread->{id};
+        my $scraped_thread = $SA->fetch_posts( thread_id => $thread->{id} );
 
-        foreach my $post ( @{$thread->{posts}} ) {
-            say $post->{title};
+        foreach my $post ( @{$scraped_thread->{posts}} ) {
+            say $post->{post};
 
             last;
         }

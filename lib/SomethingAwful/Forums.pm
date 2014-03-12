@@ -1,6 +1,7 @@
 package SomethingAwful::Forums;
 use Moose;
 use namespace::autoclean;
+use Method::Signatures;
 use URI;
 use WWW::Mechanize;
 require SomethingAwful::Forums::Scraper::Index;
@@ -42,21 +43,8 @@ has 'mech'     => (
     },
 );
 
-has 'username' => ( 
-    isa => 'Str', 
-    is  => 'rw', 
-);
 
-has 'password' => ( 
-    isa => 'Str', 
-    is  => 'rw' 
-);
-
-
-sub login {
-    my $self = shift;
-    return unless($self->username ne '' && $self->password ne '');
-
+method login(Str :$username!, Str :$password!) {
     $self->mech->get( URI->new_abs( 'account.php?action=loginform', $self->base_url ) );
 
     $self->mech->submit_form(
@@ -70,11 +58,21 @@ sub login {
 }
 
 
-sub fetch_forums {
-    my $self = shift;
-
+method fetch_forums {
     $self->mech->get( $self->base_url );
     return $self->index_scraper->scrape( $self->mech->content, $self->mech->base );
+}
+
+method fetch_threads(Int :$forum_id!) {
+    $self->mech->get( URI->new_abs( "/forumdisplay.php?forumid=$forum_id", $self->base_url ) );
+    return $self->forum_scraper->scrape( $self->mech->content, $self->mech->base );
+}
+
+method fetch_posts(Int :$thread_id!, Int :$page = 1, Int :$per_page = 40) {
+    $self->mech->get( 
+        URI->new_abs( "/showthread.php?threadid=$thread_id&pagenumber=$page&perpage=$per_page", $self->base_url ) 
+    );
+    return $self->thread_scraper->scrape( $self->mech->content, $self->mech->base );
 }
 
 
