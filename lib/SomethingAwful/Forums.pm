@@ -49,8 +49,8 @@ method login(Str :$username!, Str :$password!) {
 
     $self->mech->submit_form(
         with_fields => {
-            username => $self->username,
-            password => $self->password,
+            username => $username,
+            password => $password,
         },
     );
 
