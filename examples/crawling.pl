@@ -23,7 +23,7 @@ if( $opt->help ) {
     exit; 
 }
 
-my $SA = SomethingAwful::Forums::Scraper->new;
+my $SA = SomethingAwful::Forums->new;
 
 ###########################################################################################
 
@@ -53,6 +53,7 @@ if( exists $scraped_index->{logged_in_as_username} ) {
 
 # Do some processing on the data (gather forum data & process the first forums first page of threads)
 foreach my $forum ( @{$scraped_index->{forums}} ) {
+    use Data::Dumper;
     say Dumper($forum);
     last;
 }

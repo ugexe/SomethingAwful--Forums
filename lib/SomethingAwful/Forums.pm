@@ -3,7 +3,27 @@ use Moose;
 use namespace::autoclean;
 use URI;
 use WWW::Mechanize;
-require SomethingAwful::Forums::Scraper;
+require SomethingAwful::Forums::Scraper::Index;
+require SomethingAwful::Forums::Scraper::Forum;
+require SomethingAwful::Forums::Scraper::Thread;
+
+has 'index_scraper' => ( 
+    isa     => 'Web::Scraper::LibXML', 
+    is      => 'ro',
+    default => sub { SomethingAwful::Forums::Scraper::Index->new; },
+);
+
+has 'forum_scraper' => ( 
+    isa     => 'Web::Scraper::LibXML', 
+    is      => 'ro',
+    default => sub{ SomethingAwful::Forums::Scraper::Forum->new; },
+);
+
+has 'thread_scraper' => ( 
+    isa     => 'Web::Scraper::LibXML', 
+    is      => 'ro',
+    default => sub { SomethingAwful::Forums::Scraper::Thread->new; },
+);
 
 has 'base_url' => ( 
     isa     => 'Str', 
@@ -13,13 +33,14 @@ has 'base_url' => (
 
 has 'mech'     => ( 
     isa     => 'WWW::Mechanize', 
-    is      => 'rw', 
+    is      => 'ro', 
     default => sub { 
         return WWW::Mechanize->new( 
             agent     => 'Mozilla/5.0 (Windows; U; Windows NT 6.1; nl; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13',
             autocheck => 1,
         );
     },
+    handles => [qw( get content )],
 );
 
 has 'username' => ( 
@@ -32,11 +53,6 @@ has 'password' => (
     is  => 'rw' 
 );
 
-has 'scraper' => (
-    isa     => 'SomethingAwful::Forums::Scraper',
-    is      => 'rw',
-    default => sub { SomethingAwful::Forums::Scraper->new }, 
-);
 
 sub login {
     my $self = shift;
@@ -58,8 +74,8 @@ sub login {
 sub fetch_forums {
     my $self = shift;
 
-    $self->mech->get( $self->base_url );
-    return $self->scraper->index_scraper->scrape( $self->mech->content, $self->mech->base );
+    $self->get( $self->base_url );
+    return $self->index_scraper->scrape( $self->mech->content, $self->mech->base );
 }
 
 
