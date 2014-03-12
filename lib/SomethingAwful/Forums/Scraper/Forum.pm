@@ -16,7 +16,6 @@ sub new {
                     id    => sub {
                         return ($_[0]->attr('href') =~ s{^.*forumid=(\d+).*?$}{$1}ir);
                     };
-
                 process '//td[@class="topics"]', 
                     topic_count => 'TEXT';
                 process '//td[@class="posts"]', 
