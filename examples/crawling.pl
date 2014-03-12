@@ -23,12 +23,12 @@ if( $opt->help ) {
     exit; 
 }
 
-my $SA = SomethingAwful::Forums->new;
+my $SA = SomethingAwful::Forums::Scraper->new;
 
 ###########################################################################################
 
 say 'Starting...';
-if(defined $opt->username && defomed $opt->password) {
+if(defined $opt->username && defined $opt->password) {
     $SA->('username' => $opt->username);
     $SA->('password' => $opt->password);
 }
@@ -37,7 +37,7 @@ else {
 }
 
 say $SA->base_url;
-my $scraped_index = $SA->scraper->fetch_forums;
+my $scraped_index = $SA->fetch_forums;
 
 if( exists $scraped_index->{logged_in_as_username} ) {
     say "Logged in as: " . $scraped_index->{logged_in_as_username} if exists $scraped_index->{logged_in_as_username};

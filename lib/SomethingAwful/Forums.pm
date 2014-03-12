@@ -3,7 +3,7 @@ use Moose;
 use namespace::autoclean;
 use URI;
 use WWW::Mechanize;
-use SomethingAwful::Forums::Scraper;
+require SomethingAwful::Forums::Scraper;
 
 has 'base_url' => ( 
     isa     => 'Str', 
