@@ -16,6 +16,7 @@ my ($opt, $usage) = describe_options(
     [ 'password|p:s',   'hmmmmm',                                        ],
     [ 'thread_id|t:i',  'thread_id to use',       { default => 3543334 } ],
     [ 'pages:s',        'pages of thread to use (specific pages, not a count)', { default => '1..10' } ],
+    [ 'markov_order:i', 'Changes Markov output (see String::Markov)', { default => 1 } ],
     [],
     [ 'help', 'print usage message and exit'    ],
 );
@@ -41,7 +42,7 @@ my @pages = Number::Range->new($opt->pages)->range;
 my $scraped_thread = $SA->fetch_posts( thread_id => $opt->thread_id, pages => \@pages );
 
 my $mc = String::Markov->new( 
-    order => 1, 
+    order => $opt->markov_order, 
     sep   => ' ',
 );
 
