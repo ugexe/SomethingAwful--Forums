@@ -78,17 +78,18 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages , Int :$per_page 
 
     my $sem = new Coro::Semaphore 3;
     my @cs;
-    my $results;
+    my @unsorted_results;
     foreach my $page ( @pages ) {
         $sem->down;
 
         my $c = async {
             my $uri = URI->new_abs( "/showthread.php?threadid=$thread_id&pagenumber=$page&perpage=$per_page", $self->base_url );
-            $self->mech->get( $uri );
-            warn "Thread fetch failed! thread_id: $thread_id page: $page" if !$self->mech->success;
-            my $scraped = $self->thread_scraper->scrape( $self->mech->content, $self->base_url );
+            my $res = $self->mech->get( $uri );
 
-            push( @{$results}, $scraped );
+            warn "Thread fetch failed! thread_id: $thread_id page: $page" if !$self->mech->success;
+            my $scraped = $self->thread_scraper->scrape( $res->decoded_content, $self->base_url );
+
+            push( @unsorted_results, $scraped );
         };
 
         $sem->up;
@@ -96,7 +97,9 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages , Int :$per_page 
     }
     $_->join for (@cs);
 
-    return $results;
+
+    my @sorted_results = sort { $a->{page_info}->{current} <=> $b->{page_info}->{current} } @unsorted_results;
+    return \@sorted_results;
 }
 
 
