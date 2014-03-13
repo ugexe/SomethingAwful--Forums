@@ -60,11 +60,15 @@ foreach my $forum ( @{$scraped_index->{forums}} ) {
         say $thread->{title};
         my $scraped_thread = $SA->fetch_posts( thread_id => $thread->{id}, pages => 1 );
 
-        # the ->[0] is for pages (currently indexed at 0, but should change for 0 to represent all posts)
-        foreach my $post ( @{$scraped_thread->[0]->{posts}} ) {
-            say $post->{body};
-        }
+        foreach my $page ( @{ $scraped_thread } ) {
+            foreach my $post ( @{$page->{posts}} ) {
+                say $post->{body};
+                
+                last;
+            }
 
+            last;
+        }
         last;
     }
 
