@@ -46,10 +46,11 @@ has 'mech'     => (
 );
 
 has 'logged_in' => (
-    isa => 'Int',
-    is  => 'rw',
+    isa     => 'Int',
+    is      => 'rw',
     default => 0,
 );
+
 
 method login(Str :$username!, Str :$password!) {
     $self->mech->get( URI->new_abs( 'account.php?action=loginform', $self->base_url ) );

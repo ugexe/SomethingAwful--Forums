@@ -23,6 +23,7 @@ WriteMakefile (
         'Method::Signatures'        => 0,
         'Coro'                      => 0,
         'URI'                       => 0,
+        'namespace::autoclean'      => 0,
         'LWP::Protocol::AnyEvent::http' => 0,
     },
     BUILD_REQUIRES => {
