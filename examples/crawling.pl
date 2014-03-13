@@ -65,9 +65,9 @@ foreach my $forum ( @{$scraped_index->{forums}} ) {
             foreach my $thread_page ( @{ $scraped_thread } ) {
  
                 foreach my $post ( @{$thread_page->{posts}} ) {
-                    say $post->{body};
+                    say $post->{body_no_quotes};
                     
-                    last;
+                    #last;
                 }
 
                 last;

@@ -2,7 +2,7 @@ package SomethingAwful::Forums::Scraper::Thread;
 use strict;
 use Web::Scraper::LibXML; # Web::Scraper also works, but slower
 require HTML::TreeBuilder::LibXML; # only needed for Web::Scraper::LibXML
-
+                            use Data::Dumper
 our $VERSION = '0.01';
 
 sub new {
@@ -36,6 +36,15 @@ sub new {
                             # Need to change to read in HTML so users can parse out quotes 
                             # ->as_HTML may work
                             return $_[0]->as_text; 
+                        },
+                        body_no_quotes => sub { 
+                            my $node = $_[0]->clone;
+                            #$node = $node->delete_content;
+                            foreach my $n ( $node->findnodes('//div[@class="bbc-block"]') ) {
+                                $n->delete;
+                            }
+
+                            return $node->as_text;
                         };
                     process '//td[@class="postdate"]//a[text()="#"]', 
                         post_id => sub {
