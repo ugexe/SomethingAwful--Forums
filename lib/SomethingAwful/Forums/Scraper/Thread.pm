@@ -32,7 +32,7 @@ sub new {
                     };
 
                     process '//td[@class="postbody"]', 
-                        post => sub { 
+                        body => sub { 
                             # Need to change to read in HTML so users can parse out quotes 
                             # ->as_HTML may work
                             return $_[0]->as_text; 
