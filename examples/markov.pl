@@ -13,11 +13,12 @@ my ($opt, $usage) = describe_options(
   "$0 %o",
     [ 'username|u=s',   'your username maybe?',                          ],
     [ 'password|p:s',   'hmmmmm',                                        ],
-    [ 'thread_id|t:i',  'thread_id to use',       { required => 1 },     ],
-    [ 'pages:s',        'pages of thread to use', { required => 1 },     ],
+    [ 'thread_id|t:i',  'thread_id to use',           { required => 1 }, ],
+    [ 'pages:s',        'pages of thread to use',     { required => 1 }, ],
+    [ 'min_length:i',   'Minimum markov text length', { default => 10 }  ],
     [ 'reply',          'Reply with markov text',                        ],
     [],
-    [ 'markov_order:i', '(see String::Markov)',   { default => 1 },      ],
+    [ 'markov_order:i', '(see String::Markov)',       { default => 1 },  ],
     [ 'help', 'print usage message and exit'                             ],
 );
 if( $opt->help ) {
@@ -53,7 +54,7 @@ foreach my $thread_page ( @{ $scraped_thread } ) {
 }
 
 my $sample = '';
-while( length($sample) > 10 ) {
+while( length($sample) < 10 ) {
     $sample = $mc->generate_sample;
 }
 
