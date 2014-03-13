@@ -135,7 +135,7 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages, Int :$per_page =
     my @pages = ($pages);
     push @pages, ref $pages ? @$pages : $pages;
 
-    my $sem = new Coro::Semaphore 3; # process 3 pages max at a time
+    my $sem = new Coro::Semaphore 3; # Request 3 pages at a time max
     my @cs;
     my @unsorted_results;
     foreach my $page ( @pages ) {
@@ -144,6 +144,7 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages, Int :$per_page =
         my $c = async {
             my $uri = URI->new_abs( "/showthread.php?threadid=$thread_id&pagenumber=$page&perpage=$per_page", $self->base_url );
             my $res = $self->mech->get( $uri );
+            $sem->up; # release the lock now that we have the http::response to process
 
             warn "Thread fetch failed! thread_id: $thread_id page: $page" if !$self->mech->success;
             my $scraped = $self->thread_scraper->scrape( $res->decoded_content, $self->base_url );
@@ -151,7 +152,6 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages, Int :$per_page =
             push( @unsorted_results, $scraped );
         };
 
-        $sem->up;
         push(@cs, $c);
     }
     $_->join for (@cs);
