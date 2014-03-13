@@ -30,7 +30,11 @@ SomethingAwful::Forums
         'password' => 'awful',
     );
 
-    my $scraped_thread = $SA->fetch_posts( thread_id => 3343753, pages => 1 );
+    my $scraped_thread = $SA->fetch_posts( 
+        thread_id => 3343753, 
+        pages     => 1, 
+    );
+
     say Dumper( $scraped_thread ); 
 
     $SA->reply_to_thread( thread_id => 3343753, 'gas');
