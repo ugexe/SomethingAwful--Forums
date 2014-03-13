@@ -1,4 +1,5 @@
 package SomethingAwful::Forums;
+use Modern::Perl;
 use Moose;
 use namespace::autoclean;
 use Method::Signatures;
@@ -17,10 +18,8 @@ SomethingAwful::Forums
 
 =head1 SYNOPSIS
 
-    use v5.10;
+    use Modern::Perl;
     use SomethingAwful::Forums;
-    use strict;
-    use warnings;
     use Data::Dumper;
 
     my $SA = SomethingAwful::Forums->new;

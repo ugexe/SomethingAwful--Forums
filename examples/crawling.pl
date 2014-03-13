@@ -1,6 +1,4 @@
-use v5.10;
-use strict;
-use warnings;
+use Modern::Perl;
 use URI;
 use Getopt::Long::Descriptive;
 use lib '../lib';

@@ -24,6 +24,7 @@ WriteMakefile (
         'Coro'                      => 0,
         'URI'                       => 0,
         'namespace::autoclean'      => 0,
+        'Modern::Perl'              => 0,
         'LWP::Protocol::AnyEvent::http' => 0,
     },
     BUILD_REQUIRES => {

@@ -1,6 +1,4 @@
-use v5.10;
-use strict;
-use warnings;
+use Modern::Perl;
 use Getopt::Long::Descriptive;
 use lib '../lib';
 use Number::Range;
@@ -15,7 +13,7 @@ my ($opt, $usage) = describe_options(
     [ 'password|p:s',   'hmmmmm',                                        ],
     [ 'thread_id|t:i',  'thread_id to use',           { required => 1 }, ],
     [ 'pages:s',        'pages of thread to use',     { required => 1 }, ],
-    [ 'min_length:i',   'Minimum markov text length', { default => 10 }  ],
+    [ 'min_length:i',   'Minimum markov text length', { default => 10 }, ],
     [ 'reply',          'Reply with markov text',                        ],
     [],
     [ 'markov_order:i', '(see String::Markov)',       { default => 1 },  ],
