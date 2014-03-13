@@ -55,7 +55,7 @@ CRAWLER: {
                 next if $opt->limited;
             }
 
-            $SA->reply_to_thread( $thread->{id}, $snipe );
+            $SA->reply_to_thread( thread_id => $thread->{id}, body => $snipe );
             say 'Sniped: ' . $snipe . ' | ' . $thread->{title};
             state $counter++;
             last CRAWLER if( $counter != 0 && $counter >= $opt->max );

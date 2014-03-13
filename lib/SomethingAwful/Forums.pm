@@ -160,7 +160,7 @@ Reply to a specific thread
 
 =cut
 
-method reply_to_thread(Int :$thread_id!, Str :$body) {
+method reply_to_thread(Int :$thread_id!, Str :$body!) {
     return if !$self->logged_in;
     $self->mech->get( URI->new_abs( "newreply.php?action=newreply&threadid=$thread_id", $self->base_url ) );
 
