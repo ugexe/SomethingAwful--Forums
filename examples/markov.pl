@@ -13,10 +13,11 @@ my ($opt, $usage) = describe_options(
   "$0 %o",
     [ 'username|u=s',   'your username maybe?',                          ],
     [ 'password|p:s',   'hmmmmm',                                        ],
-    [ 'thread_id|t:i',  'thread_id to use',       { default => 3543334 } ],
-    [ 'pages:s',        'pages of thread to use (specific pages, not a count)', { default => '1..10' } ],
-    [ 'markov_order:i', 'Changes Markov output (see String::Markov)', { default => 1 } ],
+    [ 'thread_id|t:i',  'thread_id to use',       { required => 1 },     ],
+    [ 'pages:s',        'pages of thread to use (specific pages, not a count)', { required => 1 }, ],
+    [ 'reply',          'Reply with markov text',                        ],
     [],
+    [ 'markov_order:i', 'Changes Markov output (see String::Markov)', { default => 1 } ],
     [ 'help', 'print usage message and exit'    ],
 );
 if( $opt->help ) {
@@ -52,6 +53,7 @@ foreach my $thread_page ( @{ $scraped_thread } ) {
 }
 
 say scalar $mc->generate_sample;
+
 
 1;
 

@@ -45,6 +45,11 @@ has 'mech'     => (
     },
 );
 
+has 'logged_in' => (
+    isa => 'Int',
+    is  => 'rw',
+    default => 0,
+);
 
 method login(Str :$username!, Str :$password!) {
     $self->mech->get( URI->new_abs( 'account.php?action=loginform', $self->base_url ) );
@@ -56,7 +61,21 @@ method login(Str :$username!, Str :$password!) {
         },
     );
 
+    $self->logged_in(1);
     # check to see if login was a success
+}
+
+
+method reply(Int :$thread_id!, Str :$body) {
+    return if !$self->logged_in;
+    $self->mech->get( URI->new_abs( "newreply.php?action=newreply&threadid=$thread_id", $self->base_url ) );
+
+    $self->mech->submit_form(
+        with_fields => {
+            message => $body,
+        },
+    );
+
 }
 
 
