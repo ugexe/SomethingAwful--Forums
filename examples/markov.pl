@@ -52,7 +52,11 @@ foreach my $thread_page ( @{ $scraped_thread } ) {
     }
 }
 
-say scalar $mc->generate_sample;
+my $sample = $mc->generate_sample;
+
+say $sample;
+
+$SA->reply( $opt->thread_id, $sample ) if( $opt->reply && length($sample) > 10 );
 
 
 1;
