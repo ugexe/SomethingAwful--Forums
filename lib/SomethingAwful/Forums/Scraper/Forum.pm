@@ -21,7 +21,13 @@ sub new {
                 process '//td[@class="posts"]', 
                     post_count => 'TEXT';            
             };
-
+        process '//div[@class="pages top"]', 
+            page_info => scraper {
+                process '//select//option[last()]', 
+                    last    => 'TEXT';
+                process '//select//option[@selected]', 
+                    current => 'TEXT';
+            };        
         process '//tr[@class="thread"]', 
             'threads[]' => scraper {
                 process '//td[@class="star"]', 

@@ -65,14 +65,42 @@ method fetch_forums {
     return $self->index_scraper->scrape( $res->decoded_content, $self->base_url );
 }
 
+
 # Possibly allow Int|URI $forum, and if it is URI then use that instead of assuming the url
 # see: Method-Signatures and MooseX::Method::Signatures 
-method fetch_threads(Int :$forum_id!) {
-    my $res = $self->mech->get( URI->new_abs( "/forumdisplay.php?forumid=$forum_id", $self->base_url ) );
-    return $self->forum_scraper->scrape( $res->decoded_content, $self->base_url );
+method fetch_threads(Int :$forum_id!, Int|ArrayRef[Int] :$pages) {
+    my @pages = ($pages);
+    push @pages, ref $pages ? @$pages : $pages;
+
+    my $sem = new Coro::Semaphore 1; # process 1 pages max at a time
+    my @cs;
+    my @unsorted_results;
+
+    foreach my $page ( @pages ) {
+        $sem->down;
+
+        my $c = async {
+            my $uri = URI->new_abs( "/forumdisplay.php?forumid=$forum_id&daysprune=15&perpage=40&posticon=0&sortorder=desc&sortfield=lastpost&pagenumber=$page", $self->base_url );
+            my $res = $self->mech->get( $uri );
+
+            warn "Forum fetch failed! forum_id: $forum_id page: $page" if !$self->mech->success;
+            my $scraped = $self->forum_scraper->scrape( $res->decoded_content, $self->base_url );
+
+            push( @unsorted_results, $scraped );
+        };
+
+        $sem->up;
+        push(@cs, $c);
+    }
+    $_->join for (@cs);
+
+
+    my @sorted_results = sort { $a->{page_info}->{current} <=> $b->{page_info}->{current} } @unsorted_results;
+    return \@sorted_results;
 }
 
-method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages , Int :$per_page = 40) {
+
+method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages, Int :$per_page = 40) {
     my @pages = ($pages);
     push @pages, ref $pages ? @$pages : $pages;
 
