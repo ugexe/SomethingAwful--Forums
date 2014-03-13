@@ -14,7 +14,6 @@ my ($opt, $usage) = describe_options(
   "$0 %o",
     [ 'username|u=s',   'your username maybe?', ],
     [ 'password|p:s',   'hmmmmm',               ],
-    [ 'url:s',          'Forum index URL', { default => 'http://forums.somethingawful.com' } ],
     [],
     [ 'help', 'print usage message and exit'    ],
 );
