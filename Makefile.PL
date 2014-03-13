@@ -22,6 +22,7 @@ WriteMakefile (
         'Moose'                     => 0,
         'Method::Signatures'        => 0,
         'Coro'                      => 0,
+        'URI'                       => 0,
         'LWP::Protocol::AnyEvent::http' => 0,
     },
     BUILD_REQUIRES => {
