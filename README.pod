@@ -1,8 +1,8 @@
-# NAME
+=head1 NAME
 
 SomethingAwful::Forums
 
-# SYNOPSIS
+=head1 SYNOPSIS
 
     use Modern::Perl;
     use SomethingAwful::Forums;
@@ -24,69 +24,71 @@ SomethingAwful::Forums
 
     $SA->reply_to_thread( thread_id => 3343753, 'gas');
 
-# DESCRIPTION
+=head1 DESCRIPTION
 
 Scrape and post to the SomethingAwful.com forums.
 
 See /examples folder.
 
-# OBJECTS
+=head1 OBJECTS
 
-## index\_scraper
+
+=head2 index_scraper
 
 Web::Scraper::LibXML scraper for scraping forum's index page.
 
-## forum\_scraper
+=head2 forum_scraper
 
 Web::Scraper::LibXML scraper for scraping a specific forum.
 
-## thread\_scraper
+=head2 thread_scraper
 
 Web::Scraper::LibXML scraper for scraping specific thread.
 
-## base\_url
+=head2 base_url
 
 Contains the URL of the forum index. Allows use of an IP address if DNS fails to resolve.
 
-## mech
+=head2 mech
 
 WWW::Mechanize object used internally to navigate web pages.
 
-## logged\_in
+=head2 logged_in
 
 Returns 1 if it successfully logged in. 
 
-# METHODS
+=head1 METHODS
 
-## login ( username => $username, password => $password )
+=head2 login ( username => $username, password => $password )
 
 Login to forums using passed credentials. 
 
-## reply\_to\_thread ( thread\_id => $thread\_id, body => $body )
+=head2 reply_to_thread ( thread_id => $thread_id, body => $body )
 
 Reply to a specific thread
 
-## reply\_to\_post ( post\_id => $post\_id, body => $body )
+=head2 reply_to_post ( post_id => $post_id, body => $body )
 
 Reply to a specific post.
 
-## fetch\_forums
+=head2 fetch_forums
 
 Return a hashref representing the scraped forum index.
 
-## fetch\_threads ( forum\_id => $forum\_id, pages => \[1,2\] )
+=head2 fetch_threads ( forum_id => $forum_id, pages => [1,2] )
 
 Return a hashref repsenting the threads scraped from the supplied pages of the supplied forum id.
 
-## fetch\_posts ( thread\_id => $forum\_id, pages => \[1,2\] )
+=head2 fetch_posts ( thread_id => $forum_id, pages => [1,2] )
 
 Return a hashref repsenting the posts scraped from the supplied pages of the supplied thread id.
 
-# AUTHOR
+=head1 AUTHOR
 
 ugexe
 
-# LICENSE
+=head1 LICENSE
 
 This library is free software, you can redistribute it and/or modify
 it under the same terms as Perl itself.
+
