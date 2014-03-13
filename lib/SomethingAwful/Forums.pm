@@ -67,7 +67,7 @@ method login(Str :$username!, Str :$password!) {
 }
 
 
-method reply(Int :$thread_id!, Str :$body) {
+method reply_to_thread(Int :$thread_id!, Str :$body) {
     return if !$self->logged_in;
     $self->mech->get( URI->new_abs( "newreply.php?action=newreply&threadid=$thread_id", $self->base_url ) );
 
@@ -76,7 +76,18 @@ method reply(Int :$thread_id!, Str :$body) {
             message => $body,
         },
     );
+}
 
+
+method reply_to_post(Int :$post_id!, Str :$body) {
+    return if !$self->logged_in;
+    $self->mech->get( URI->new_abs( "newreply.php?action=newreply&postid=$post_id", $self->base_url ) );
+
+    $self->mech->submit_form(
+        with_fields => {
+            message => $body,
+        },
+    );
 }
 
 

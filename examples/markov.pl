@@ -52,11 +52,17 @@ foreach my $thread_page ( @{ $scraped_thread } ) {
     }
 }
 
-my $sample = $mc->generate_sample;
+my $sample;
+while( length($sample) > 10 ) {
+    $sample = $mc->generate_sample;
+}
 
 say $sample;
 
-$SA->reply( $opt->thread_id, $sample ) if( $opt->reply && length($sample) > 10 );
+if( $opt->reply ) {
+    $SA->reply_to_thread( $opt->thread_id, $sample );
+    say 'Reply made!'
+}
 
 
 1;
