@@ -2,7 +2,7 @@ package SomethingAwful::Forums::Scraper::Thread;
 use strict;
 use Web::Scraper::LibXML; # Web::Scraper also works, but slower
 require HTML::TreeBuilder::LibXML; # only needed for Web::Scraper::LibXML
-                            use Data::Dumper
+
 our $VERSION = '0.01';
 
 sub new {
@@ -39,7 +39,7 @@ sub new {
                         },
                         body_no_quotes => sub { 
                             my $node = $_[0]->clone;
-                            #$node = $node->delete_content;
+
                             foreach my $n ( $node->findnodes('//div[@class="bbc-block"]') ) {
                                 $n->delete;
                             }
