@@ -11,7 +11,7 @@ my ($opt, $usage) = describe_options(
     [ 'username|u=s',   'your username maybe?',       { required => 1     }, ],
     [ 'password|p:s',   'hmmmmm',                     { required => 1     }, ],
     [ 'forum_id|f:i',   'thread_id to use',           { required => 1     }, ],
-    [ 'pages|pg:s',     'pages of forum to use',      { default  => [1,2] }, ],
+    [ 'pages|pg:s',     'pages of forum to use',      { default  => '1,2' }, ],
     [ 'max|m:i',        'Max snipes (0 = no limit)',  { default  => 5     }, ],
     [ 'limited',        'Only snipe pages 2,3,and 69',                       ],
     [],
