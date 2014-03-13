@@ -10,11 +10,38 @@ require SomethingAwful::Forums::Scraper::Index;
 require SomethingAwful::Forums::Scraper::Forum;
 require SomethingAwful::Forums::Scraper::Thread;
 
+
+=head1 NAME
+
+SomethingAwful::Forums
+
+=head1 DESCRIPTION
+
+Scrape and post to the SomethingAwful.com forums.
+
+See /examples folder.
+
+=head1 OBJECTS
+
+
+=head2 index_scraper
+
+Web::Scraper::LibXML scraper for scraping forum's index page.
+
+=cut
+
 has 'index_scraper' => ( 
     isa     => 'Web::Scraper::LibXML', 
     is      => 'ro',
     default => sub { SomethingAwful::Forums::Scraper::Index->new; },
 );
+
+
+=head2 forum_scraper
+
+Web::Scraper::LibXML scraper for scraping a specific forum.
+
+=cut
 
 has 'forum_scraper' => ( 
     isa     => 'Web::Scraper::LibXML', 
@@ -22,17 +49,38 @@ has 'forum_scraper' => (
     default => sub{ SomethingAwful::Forums::Scraper::Forum->new; },
 );
 
+
+=head2 thread_scraper
+
+Web::Scraper::LibXML scraper for scraping specific thread.
+
+=cut
+
 has 'thread_scraper' => ( 
     isa     => 'Web::Scraper::LibXML', 
     is      => 'ro',
     default => sub { SomethingAwful::Forums::Scraper::Thread->new; },
 );
 
+
+=head2 base_url
+
+Contains the URL of the forum index. Allows use of an IP address if DNS fails to resolve.
+
+=cut
+
 has 'base_url' => ( 
     isa     => 'Str', 
     is      => 'rw', 
     default => 'http://forums.somethingawful.com/' 
 );
+
+
+=head2 mech
+
+WWW::Mechanize object used internally to navigate web pages.
+
+=cut
 
 has 'mech'     => ( 
     isa     => 'WWW::Mechanize', 
@@ -45,11 +93,27 @@ has 'mech'     => (
     },
 );
 
+
+=head2 logged_in
+
+Returns 1 if it successfully logged in. 
+
+=cut
+
 has 'logged_in' => (
     isa     => 'Int',
     is      => 'rw',
     default => 0,
 );
+
+
+=head1 METHODS
+
+=head2 login ( username => $username, password => $password )
+
+Login to forums using passed credentials. 
+
+=cut
 
 
 method login(Str :$username!, Str :$password!) {
@@ -67,6 +131,12 @@ method login(Str :$username!, Str :$password!) {
 }
 
 
+=head2 reply_to_thread ( thread_id => $thread_id, body => $body )
+
+Reply to a specific thread
+
+=cut
+
 method reply_to_thread(Int :$thread_id!, Str :$body) {
     return if !$self->logged_in;
     $self->mech->get( URI->new_abs( "newreply.php?action=newreply&threadid=$thread_id", $self->base_url ) );
@@ -78,6 +148,12 @@ method reply_to_thread(Int :$thread_id!, Str :$body) {
     );
 }
 
+
+=head2 reply_to_post ( post_id => $post_id, body => $body )
+
+Reply to a specific post.
+
+=cut
 
 method reply_to_post(Int :$post_id!, Str :$body) {
     return if !$self->logged_in;
@@ -91,11 +167,23 @@ method reply_to_post(Int :$post_id!, Str :$body) {
 }
 
 
+=head2 fetch_forums
+
+Return a hashref representing the scraped forum index.
+
+=cut
+
 method fetch_forums {
     my $res = $self->mech->get( $self->base_url );
     return $self->index_scraper->scrape( $res->decoded_content, $self->base_url );
 }
 
+
+=head2 fetch_threads ( forum_id => $forum_id, pages => [1,2] )
+
+Return a hashref repsenting the threads scraped from the supplied pages of the supplied forum id.
+
+=cut
 
 # Possibly allow Int|URI $forum, and if it is URI then use that instead of assuming the url
 # see: Method-Signatures and MooseX::Method::Signatures 
@@ -131,6 +219,12 @@ method fetch_threads(Int :$forum_id!, Int|ArrayRef[Int] :$pages) {
 }
 
 
+=head2 fetch_posts ( thread_id => $forum_id, pages => [1,2] )
+
+Return a hashref repsenting the posts scraped from the supplied pages of the supplied thread id.
+
+=cut
+
 method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages, Int :$per_page = 40) {
     my @pages = ($pages);
     push @pages, ref $pages ? @$pages : $pages;
@@ -161,6 +255,17 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages, Int :$per_page =
     return \@sorted_results;
 }
 
+
+=head1 AUTHOR
+
+ugexe
+
+=head1 LICENSE
+
+This library is free software, you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
 
 __PACKAGE__->meta->make_immutable;
 1;
