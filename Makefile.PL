@@ -23,7 +23,6 @@ WriteMakefile (
         'Method::Signatures'        => 0,
         'Coro'                      => 0,
         'LWP::Protocol::AnyEvent::http' => 0,
-        'Hash::Merge'               => 0,
     },
     BUILD_REQUIRES => {
         'Test::More'        => 0,

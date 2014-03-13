@@ -6,7 +6,6 @@ use URI;
 use LWP::Protocol::AnyEvent::http;
 use WWW::Mechanize;
 use Coro qw( async );
-use Hash::Merge qw( merge );
 require SomethingAwful::Forums::Scraper::Index;
 require SomethingAwful::Forums::Scraper::Forum;
 require SomethingAwful::Forums::Scraper::Thread;
