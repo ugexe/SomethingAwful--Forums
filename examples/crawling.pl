@@ -58,7 +58,7 @@ foreach my $forum ( @{$scraped_index->{forums}} ) {
 
     foreach my $thread ( @{$scraped_forum->{threads}} ) {
         say $thread->{title};
-        my $scraped_thread = $SA->fetch_posts( thread_id => $thread->{id}, pages => 1 );
+        my $scraped_thread = $SA->fetch_posts( thread_id => $thread->{id}, pages => [1,2] );
 
         foreach my $page ( @{ $scraped_thread } ) {
             foreach my $post ( @{$page->{posts}} ) {

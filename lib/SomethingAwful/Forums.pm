@@ -61,22 +61,22 @@ method login(Str :$username!, Str :$password!) {
 
 
 method fetch_forums {
-    $self->mech->get( $self->base_url );
-    return $self->index_scraper->scrape( $self->mech->content, $self->mech->base );
+    my $res = $self->mech->get( $self->base_url );
+    return $self->index_scraper->scrape( $res->decoded_content, $self->base_url );
 }
 
 # Possibly allow Int|URI $forum, and if it is URI then use that instead of assuming the url
 # see: Method-Signatures and MooseX::Method::Signatures 
 method fetch_threads(Int :$forum_id!) {
-    $self->mech->get( URI->new_abs( "/forumdisplay.php?forumid=$forum_id", $self->base_url ) );
-    return $self->forum_scraper->scrape( $self->mech->content, $self->mech->base );
+    my $res = $self->mech->get( URI->new_abs( "/forumdisplay.php?forumid=$forum_id", $self->base_url ) );
+    return $self->forum_scraper->scrape( $res->decoded_content, $self->base_url );
 }
 
 method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages , Int :$per_page = 40) {
     my @pages = ($pages);
     push @pages, ref $pages ? @$pages : $pages;
 
-    my $sem = new Coro::Semaphore 3;
+    my $sem = new Coro::Semaphore 3; # process 3 pages max at a time
     my @cs;
     my @unsorted_results;
     foreach my $page ( @pages ) {
