@@ -36,7 +36,7 @@ SomethingAwful::Forums
 
     say Dumper( $scraped_thread ); 
 
-    $SA->reply_to_thread( thread_id => 3343753, 'gas');
+    $SA->reply_to_thread( thread_id => 3343753, 'gas' );
 
 =head1 DESCRIPTION
 
