@@ -15,6 +15,26 @@ require SomethingAwful::Forums::Scraper::Thread;
 
 SomethingAwful::Forums
 
+=head1 SYNOPSIS
+
+    use v5.10;
+    use SomethingAwful::Forums;
+    use strict;
+    use warnings;
+    use Data::Dumper;
+
+    my $SA = SomethingAwful::Forums->new;
+
+    $SA->login(
+        'username' => 'something',
+        'password' => 'awful',
+    );
+
+    my $scraped_thread = $SA->fetch_posts( thread_id => 3343753, pages => 1 );
+    say Dumper( $scraped_thread ); 
+
+    $SA->reply_to_thread( thread_id => 3343753, 'gas');
+
 =head1 DESCRIPTION
 
 Scrape and post to the SomethingAwful.com forums.
