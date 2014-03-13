@@ -1,9 +1,9 @@
 use Modern::Perl;
 use Getopt::Long::Descriptive;
-use lib '../lib';
 use Number::Range;
-use SomethingAwful::Forums;
 use String::Markov;
+use lib '../lib';
+use SomethingAwful::Forums;
 
 # Use Markov chains to generate a post based on a specific thread
 

@@ -1,7 +1,7 @@
 use Modern::Perl;
 use Getopt::Long::Descriptive;
-use lib '../lib';
 use Number::Range;
+use lib '../lib';
 use SomethingAwful::Forums;
 
 # Snipe somethingawful threads.
