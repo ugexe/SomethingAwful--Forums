@@ -52,7 +52,7 @@ if( exists $scraped_index->{logged_in_as_username} ) {
 # Do some processing on the data (gather forum data & process the first forums first page of threads)
 foreach my $forum ( @{$scraped_index->{forums}} ) {
     say $forum->{name};
-    my $scraped_forum = $SA->fetch_threads( forum_id => 1, pages => [1,2] );
+    my $scraped_forum = $SA->fetch_threads( forum_id => 1, pages => 1 );
 
     foreach my $forum_page ( @{ $scraped_forum } ) {
 
