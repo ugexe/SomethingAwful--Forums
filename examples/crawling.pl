@@ -60,9 +60,10 @@ foreach my $forum ( @{$scraped_index->{forums}} ) {
             say $thread->{title};
             my $scraped_thread = $SA->fetch_posts( thread_id => $thread->{id}, pages => [1,2] );
 
-            foreach my $thread_page ( @{ $scraped_thread } ) {
- 
+            foreach my $thread_page ( @{ $scraped_thread } ) { 
+
                 foreach my $post ( @{$thread_page->{posts}} ) {
+                    next unless $post->{body_no_quotes} =~ /\w/;
                     say $post->{body_no_quotes};
                     
                     last;

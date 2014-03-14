@@ -181,7 +181,7 @@ Reply to a specific post.
 
 =cut
 
-method reply_to_post(Int :$post_id!, Str :$body) {
+method reply_to_post(Int :$post_id!, Str :$body!) {
     return if !$self->logged_in;
     $self->mech->get( URI->new_abs( "newreply.php?action=newreply&postid=$post_id", $self->base_url ) );
 
@@ -213,35 +213,23 @@ Return a hashref repsenting the threads scraped from the supplied pages of the s
 
 # Possibly allow Int|URI $forum, and if it is URI then use that instead of assuming the url
 # see: Method-Signatures and MooseX::Method::Signatures 
-method fetch_threads(Int :$forum_id!, Int|ArrayRef[Int] :$pages) {
-    my @pages = ($pages);
-    push @pages, ref $pages ? @$pages : $pages;
+method fetch_threads(Int :$forum_id!, Int|ArrayRef[Int] :$pages = 1) {
+    my @page_list;
+    push @page_list, ref $pages ? @$pages : $pages;
 
-    my $sem = new Coro::Semaphore 1; # process 1 pages max at a time
-    my @cs;
-    my @unsorted_results;
+    my @results;
+    foreach my $page ( @page_list ) {
+        my $uri   = URI->new_abs( "/forumdisplay.php?forumid=$forum_id&daysprune=15&perpage=40&posticon=0&sortorder=desc&sortfield=lastpost&pagenumber=$page", $self->base_url );
+        my $res   = $self->mech->get( $uri );
 
-    foreach my $page ( @pages ) {
-        $sem->down;
+        warn "Forum fetch failed! forum_id: $forum_id page: $page" if !$res->is_success;
+        my $scraped = $self->forum_scraper->scrape( $res->decoded_content, $self->base_url );
 
-        my $c = async {
-            my $uri = URI->new_abs( "/forumdisplay.php?forumid=$forum_id&daysprune=15&perpage=40&posticon=0&sortorder=desc&sortfield=lastpost&pagenumber=$page", $self->base_url );
-            my $res = $self->mech->get( $uri );
-
-            warn "Forum fetch failed! forum_id: $forum_id page: $page" if !$self->mech->success;
-            my $scraped = $self->forum_scraper->scrape( $res->decoded_content, $self->base_url );
-
-            push( @unsorted_results, $scraped );
-        };
-
-        $sem->up;
-        push(@cs, $c);
+        push( @results, $scraped );
     }
-    $_->join for (@cs);
 
 
-    my @sorted_results = sort { $a->{page_info}->{current} <=> $b->{page_info}->{current} } @unsorted_results;
-    return \@sorted_results;
+    return \@results;
 }
 
 
@@ -251,25 +239,29 @@ Return a hashref repsenting the posts scraped from the supplied pages of the sup
 
 =cut
 
-method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages, Int :$per_page = 40) {
-    my @pages = ($pages);
-    push @pages, ref $pages ? @$pages : $pages;
+method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages!, Int :$per_page = 40, Int :$threads = 3) {
+    my @page_list;
+    push @page_list, ref $pages ? @$pages : $pages;
 
-    my $sem = new Coro::Semaphore 3; # Request 3 pages at a time max
+    my $sem = Coro::Semaphore->new($threads); # Request 10 pages at a time max
     my @cs;
     my @unsorted_results;
-    foreach my $page ( @pages ) {
+    foreach my $page ( @page_list ) {
         $sem->down;
 
         my $c = async {
-            my $uri = URI->new_abs( "/showthread.php?threadid=$thread_id&pagenumber=$page&perpage=$per_page", $self->base_url );
-            my $res = $self->mech->get( $uri );
-            $sem->up; # release the lock now that we have the http::response to process
+            my $guard = $sem->guard;
+            my $uri   = URI->new_abs( "/showthread.php?threadid=$thread_id&pagenumber=$page&perpage=$per_page", $self->base_url );
+            my $res   = $self->mech->get( $uri );
 
-            warn "Thread fetch failed! thread_id: $thread_id page: $page" if !$self->mech->success;
-            my $scraped = $self->thread_scraper->scrape( $res->decoded_content, $self->base_url );
-
-            push( @unsorted_results, $scraped );
+            if( !$res->is_success ) {
+                warn "Thread fetch failed! thread_id: $thread_id page: $page";                
+                return;
+            }
+            else {
+                my $scraped = $self->thread_scraper->scrape( $res->decoded_content, $self->base_url );
+                push( @unsorted_results, $scraped );
+            }
         };
 
         push(@cs, $c);
