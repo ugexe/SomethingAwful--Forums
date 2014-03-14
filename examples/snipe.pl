@@ -36,7 +36,7 @@ $SA->login(
 # Allows breaking out of 2 loops while declaring state $counter on an inner loop
 CRAWLER: {
     while(1) {
-        my $waketime = ($opt->recheck_after?( time + opt->recheck_after ):0);
+        my $waketime = ($opt->recheck_after?( time + $opt->recheck_after ):0);
         my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => \@pages );
 
         foreach my $forum_page ( @{ $scraped_forum } ) {
