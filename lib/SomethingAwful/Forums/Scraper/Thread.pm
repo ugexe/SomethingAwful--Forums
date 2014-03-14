@@ -7,13 +7,23 @@ our $VERSION = '0.01';
 
 sub new {
     return scraper {
+
+        # Sets defaults for the next block since single page threads
+        # don't have the page info in the html. Must find a better way to do this.
         process '//div[@class="pages top"]', 
+            page_info => sub {
+                return {
+                    last    => 1,
+                    current => 1,
+                };
+            },
             page_info => scraper {
                 process '//select//option[last()]', 
                     last    => 'TEXT';
                 process '//select//option[@selected]', 
                     current => 'TEXT';
-            };        
+            };
+
         process '//div[@id="thread"]//table[starts-with(@id, "post")]', 
             'posts[]' => scraper {
                 process '//td[starts-with(@class, "userinfo")]', 
