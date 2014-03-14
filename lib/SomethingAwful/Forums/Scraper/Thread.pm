@@ -8,10 +8,9 @@ our $VERSION = '0.01';
 sub new {
     return scraper {
 
-        # Sets defaults for the next block since single page threads
-        # don't have the page info in the html. Must find a better way to do this.
         process '//div[@class="pages top"]', 
             page_info => sub {
+                # sets defaults for next block below
                 return {
                     last    => 1,
                     current => 1,
@@ -24,6 +23,10 @@ sub new {
                     current => 'TEXT';
             };
 
+        process '//*[contains(@href,"newthread")][contains(@href,"forumid=")]',
+            forum_id => sub {
+                return ($_[0]->attr('href') =~ s{^.*?forumid=(\d+).*?$}{$1}ir);
+            }; 
         process '//div[@id="thread"]//table[starts-with(@id, "post")]', 
             'posts[]' => scraper {
                 process '//td[starts-with(@class, "userinfo")]', 
