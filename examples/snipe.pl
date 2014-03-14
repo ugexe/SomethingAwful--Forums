@@ -13,6 +13,7 @@ my ($opt, $usage) = describe_options(
     [ 'forum_id|f:i',   'forum_id to use',            { required => 1     }, ],
     [ 'pages|pg:s',     'pages of forum to use',      { default  => '1,2' }, ],
     [ 'max|m:i',        'Max snipes (0 = no limit)',  { default  => 5     }, ],
+    [ 'recheck_after:i','Rerun every X seconds',                             ],
     [ 'limited',        'Only snipe pages 2,3,and 69',                       ],
     [],
     [ 'help', 'print usage message and exit'                                 ],
@@ -33,32 +34,43 @@ $SA->login(
 );
 my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => \@pages );
 
+
 # Allows breaking out of 2 loops while declaring state $counter on an inner loop
 CRAWLER: {
-    foreach my $forum_page ( @{ $scraped_forum } ) {
-        foreach my $thread ( @{ $forum_page->{threads} } ) {
-            next if ($thread->{counts}->{reply} + 1) % 40;
+    while(1) {
+        my $waketime = time + ($opt->recheck_after?$opt->recheck_after:0);
 
-            my $snipe = ':sicknasty:';
-            my $next_page = ($thread->{counts}->{page} + 1);
+        foreach my $forum_page ( @{ $scraped_forum } ) {
+            foreach my $thread ( @{ $forum_page->{threads} } ) {
+                next if ($thread->{counts}->{reply} + 1) % 40;
 
-            if( $next_page == 2 ) {
-                $snipe = ':synpa:';
-            }
-            elsif( $next_page == 3 ) {
-                $snipe = ':page3:';
-            }
-            elsif( $next_page == 69 ) {
-                $snipe = ':69snypa:';
-            }
-            else {
-                next if $opt->limited;
-            }
+                my $snipe = ':sicknasty:';
+                my $next_page = ($thread->{counts}->{page} + 1);
 
-            $SA->reply_to_thread( thread_id => $thread->{id}, body => $snipe );
-            say 'Sniped: ' . $snipe . ' | ' . $thread->{title};
-            state $counter++;
-            last CRAWLER if( $counter != 0 && $counter >= $opt->max );
+                if( $next_page == 2 ) {
+                    $snipe = ':synpa:';
+                }
+                elsif( $next_page == 3 ) {
+                    $snipe = ':page3:';
+                }
+                elsif( $next_page == 69 ) {
+                    $snipe = ':69snypa:';
+                }
+                else {
+                    next if $opt->limited;
+                }
+
+                $SA->reply_to_thread( thread_id => $thread->{id}, body => $snipe );
+                say 'Sniped: ' . $snipe . ' | ' . $thread->{title};
+                state $counter++;
+                last CRAWLER if( $counter != 0 && $counter >= $opt->max );
+            }
+        }
+
+        if( $waketime ) {
+            my $sleep_for = $waketime - time;
+            say "Rechecking in $sleep_for seconds";
+            sleep( $sleep_for );
         }
     }
 }
