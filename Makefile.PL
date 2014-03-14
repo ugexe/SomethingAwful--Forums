@@ -12,7 +12,7 @@ WriteMakefile (
     ABSTRACT_FROM  => $pm,
     AUTHOR         => 'Nick Logan <ugexe@cpan.org>',
     LICENSE        => 'perl',
-    MIN_PERL_VERSION => '5.010',
+    MIN_PERL_VERSION => '5.014',
     PREREQ_PM      => {
         'Web::Scraper'              => 0,
         'WWW::Mechanize'            => 0,
