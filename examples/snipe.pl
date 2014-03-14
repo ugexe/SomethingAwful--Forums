@@ -32,13 +32,12 @@ $SA->login(
     'username' => $opt->username,
     'password' => $opt->password,
 );
-my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => \@pages );
-
 
 # Allows breaking out of 2 loops while declaring state $counter on an inner loop
 CRAWLER: {
     while(1) {
         my $waketime = time + ($opt->recheck_after?$opt->recheck_after:0);
+        my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => \@pages );
 
         foreach my $forum_page ( @{ $scraped_forum } ) {
             foreach my $thread ( @{ $forum_page->{threads} } ) {
