@@ -7,6 +7,7 @@ use URI;
 use LWP::Protocol::AnyEvent::http;
 use WWW::Mechanize;
 use Coro qw( async );
+use HTTP::Cookies;
 require SomethingAwful::Forums::Scraper::Index;
 require SomethingAwful::Forums::Scraper::Forum;
 require SomethingAwful::Forums::Scraper::Thread;
@@ -110,8 +111,9 @@ has 'mech'     => (
     is      => 'ro', 
     default => sub { 
         return WWW::Mechanize->new( 
-            agent     => 'Mozilla/5.0 (Windows; U; Windows NT 6.1; nl; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13',
-            autocheck => 1,
+            agent      => 'Mozilla/5.0 (Windows; U; Windows NT 6.1; nl; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13',
+            autocheck  => 0,
+            cookie_jar => HTTP::Cookies->new(file => '.cookies', autosave => 1, ignore_discard => 1),
         );
     },
 );
@@ -150,6 +152,7 @@ method login(Str :$username!, Str :$password!) {
     );
 
     $self->logged_in(1);
+    $self->mech->cookie_jar->save;
     # check to see if login was a success
 }
 
