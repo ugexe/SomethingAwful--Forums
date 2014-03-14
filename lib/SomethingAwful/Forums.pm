@@ -239,7 +239,7 @@ Return a hashref repsenting the posts scraped from the supplied pages of the sup
 
 =cut
 
-method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages!, Int :$per_page = 40, Int :$threads = 3) {
+method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages = 1, Int :$per_page = 40, Int :$threads = 3) {
     my @page_list;
     push @page_list, ref $pages ? @$pages : $pages;
 
