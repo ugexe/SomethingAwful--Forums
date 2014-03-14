@@ -1,5 +1,4 @@
 use Modern::Perl;
-use URI;
 use Getopt::Long::Descriptive;
 use lib '../lib';
 use SomethingAwful::Forums;
