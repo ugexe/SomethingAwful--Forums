@@ -243,7 +243,7 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages = 1, Int :$per_pa
     my @page_list;
     push @page_list, ref $pages ? @$pages : $pages;
 
-    my $sem = Coro::Semaphore->new($threads); # Request 10 pages at a time max
+    my $sem = Coro::Semaphore->new($threads); # Process $threads pages at a time max
     my @cs;
     my @unsorted_results;
     foreach my $page ( @page_list ) {
