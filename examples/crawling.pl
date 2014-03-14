@@ -70,6 +70,7 @@ foreach my $forum ( @{$scraped_index->{forums}} ) {
 
                 last;
             }
+            
             last;
         }
 
