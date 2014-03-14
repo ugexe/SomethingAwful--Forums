@@ -105,7 +105,7 @@ has 'base_url' => (
 WWW::Mechanize object used internally to navigate web pages.
 
 =cut
-
+# TODO Make cookie file editable
 has 'mech'     => ( 
     isa     => 'WWW::Mechanize', 
     is      => 'ro', 

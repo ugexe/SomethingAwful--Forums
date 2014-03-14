@@ -60,8 +60,8 @@ CRAWLER: {
                 }
 
                 $SA->reply_to_thread( thread_id => $thread->{id}, body => $snipe );
-                say 'Sniped: ' . $snipe . ' | ' . $thread->{title};
                 state $counter++;
+                say "[$counter] $snipe  - " . $thread->{title};
                 last CRAWLER if( $counter != 0 && $counter >= $opt->max );
             }
         }
