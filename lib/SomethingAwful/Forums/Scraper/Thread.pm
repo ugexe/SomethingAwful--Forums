@@ -30,8 +30,8 @@ sub new {
         process '//div[@id="thread"]//table[starts-with(@id, "post")]', 
             'posts[]' => scraper {
                 process '//td[starts-with(@class, "userinfo")]', 
-                    author_info => sub {
-                        return ($_[0]->attr('class') =~ s{^.*?userid-(\d+).*?$}{$1}ir);
+                    authorinfo => sub {
+                        return ( user_id => ($_[0]->attr('class') =~ s{^.*?userid-(\d+).*?$}{$1}ir) );
                     }, 
                     authorinfo => scraper {
                         process '//dt[@class="author"]',     
