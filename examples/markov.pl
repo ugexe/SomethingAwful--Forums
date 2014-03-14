@@ -59,7 +59,7 @@ while( length($sample) < 10 ) {
 say $sample;
 
 if( $opt->reply ) {
-    $SA->reply_to_thread( $opt->thread_id, $sample );
+    $SA->reply_to_thread( thread_id => $opt->thread_id, body => $sample );
     say 'Reply made!'
 }
 
