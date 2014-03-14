@@ -34,7 +34,7 @@ sub new {
                     star      => 'TEXT';
                 process '//td[@class="icon"]/img', 
                     url       => '@src', 
-                    posticon  => sub {
+                    post_icon  => sub {
                         return $_[0]->attr('src') =~ s{.*#(\d+)$}{$1}r;
                     };
                 process '//td[contains(@class, "title_sticky")]', 
@@ -71,7 +71,7 @@ sub new {
                         };                 
                     };
                 process '//td[@class="lastpost"]', 
-                    lastpost  => scraper {
+                    last_post  => scraper {
                         process '//div[@class="date"]', 
                             date   => 'TEXT';
                         process '//a[@class="author"]', 
