@@ -68,6 +68,7 @@ CRAWLER: {
 
         if( $waketime ) {
             my $sleep_for = $waketime - time;
+            $sleep_for = $opt->recheck_after if $sleep_for <= 0;
             say "Rechecking in $sleep_for seconds";
             sleep( $sleep_for );
         }
