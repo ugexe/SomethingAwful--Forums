@@ -15,7 +15,7 @@ my ($opt, $usage) = describe_options(
     [ 'pages:s',        'pages of forum to reply to',     { required => 1 }, ],
     [ 'message|m:s',    'message to post to each thread', { required => 1 }, ],
     [ 'goatse',         'add goatse to your posts',                          ],    
-    [ 'sleep|s:i',      'Seconds to sleep between posts', { default  => 2 }, ],
+    [ 'sleep|s:i',      'Seconds to sleep between posts', { default  => 3 }, ],
     [],
     [ 'help', 'print usage message and exit'                                 ],
 );
@@ -39,7 +39,7 @@ $SA->login(
 );
 
 my @pages = Number::Range->new($opt->pages)->range;
-my $scraped_forum = $SA->fetch_threads( forum_id => $opt->thread_id, pages => \@pages );
+my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => \@pages );
 
 foreach my $forum_page ( @{ $scraped_forum } ) {
     foreach my $thread ( @{$forum_page->{threads}} ) {
