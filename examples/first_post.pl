@@ -2,6 +2,7 @@ use Modern::Perl;
 use Getopt::Long::Descriptive;
 use Number::Range;
 use Acme::Goatse;
+use Try::Tiny;
 use lib '../lib';
 use SomethingAwful::Forums;
 
@@ -37,15 +38,26 @@ $SA->login(
 );
 
 
+my %memory;
+
 while(1) {
     my $waketime = ($opt->recheck_after?( time + $opt->recheck_after ):0);
-    my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => \@pages );
+    my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => 1 );
 
     foreach my $forum_page ( @{ $scraped_forum } ) {
         foreach my $thread ( @{ $forum_page->{threads} } ) {
-            next if $thread->{counts}->{reply};
+            next if $thread->{counts}->{reply} != 0;
+            next if exists $memory{$thread->{id}};
+            
+            try {
+                $SA->reply_to_thread( 
+                    thread_id => $thread->{id}, 
+                    body => ( $message . ( ' [b][/b]' x int(rand(100)) ) ), 
+                );
+            };
 
-            $SA->reply_to_thread( thread_id => $thread->{id}, body => $message );
+            say $thread->{title};
+            $memory{$thread->{id}} = 1;
         }
     }
 
