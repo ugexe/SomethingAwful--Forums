@@ -6,7 +6,7 @@ use Try::Tiny;
 use lib '../lib';
 use SomethingAwful::Forums;
 
-# Snipe somethingawful threads.
+# Snipe somethingawful threads (first post)
 
 my ($opt, $usage) = describe_options(
   "$0 %o",
@@ -48,7 +48,7 @@ while(1) {
         foreach my $thread ( @{ $forum_page->{threads} } ) {
             next if $thread->{counts}->{reply} != 0;
             next if exists $memory{$thread->{id}};
-            
+
             try {
                 $SA->reply_to_thread( 
                     thread_id => $thread->{id}, 
