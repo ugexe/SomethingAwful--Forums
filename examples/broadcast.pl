@@ -46,7 +46,7 @@ foreach my $forum_page ( @{ $scraped_forum } ) {
         try {
             $SA->reply_to_thread( 
                 thread_id => $thread->{id}, 
-                body => ( $message . ( ' [b][/b]' x int(rand(20)) ) ), # add nonsense to bypass duplicate detection
+                body => ( $message . ( ' [b][/b]' x int(rand(1000)) ) ), # add nonsense to bypass duplicate detection
             );
         };
 

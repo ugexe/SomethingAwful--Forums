@@ -11,7 +11,7 @@ use HTTP::Cookies;
 require SomethingAwful::Forums::Scraper::Index;
 require SomethingAwful::Forums::Scraper::Forum;
 require SomethingAwful::Forums::Scraper::Thread;
-
+require SomethingAwful::Forums::Scraper::Users::Online;
 
 =head1 NAME
 
@@ -85,6 +85,20 @@ has 'thread_scraper' => (
     is      => 'ro',
     default => sub { SomethingAwful::Forums::Scraper::Thread->new; },
 );
+
+
+=head2 online_user_scraper
+
+Web::Scraper::LibXML scraper for scraping current online users for a specific forum
+
+=cut
+
+has 'online_user_scraper' => ( 
+    isa     => 'Web::Scraper::LibXML', 
+    is      => 'ro',
+    default => sub { SomethingAwful::Forums::Scraper::Users::Online->new; },
+);
+
 
 
 =head2 base_url
@@ -233,7 +247,7 @@ method fetch_threads(Int :$forum_id!, Int|ArrayRef[Int] :$pages = 1) {
 }
 
 
-=head2 fetch_posts ( thread_id => $forum_id, pages => [1,2] )
+=head2 fetch_posts ( thread_id => $thread_id, pages => [1,2] )
 
 Return a hashref repsenting the posts scraped from the supplied pages of the supplied thread id.
 
@@ -271,6 +285,44 @@ method fetch_posts(Int :$thread_id!, Int|ArrayRef[Int] :$pages = 1, Int :$per_pa
 
     my @sorted_results = sort { $a->{page_info}->{current} <=> $b->{page_info}->{current} } @unsorted_results;
     return \@sorted_results;
+}
+
+
+=head2 fetch_online_users ( forum_id => $forum_id, pages => 0 )
+
+Return a hashref repsenting the online users for a specific forum. pages => 0 for all pages
+
+=cut
+
+method fetch_online_users(Int :$forum_id!, Int|ArrayRef[Int] :$pages = 0 ) {
+    my @page_list;
+    push @page_list, ref $pages ? @$pages : ($pages?$pages:1);
+
+    my @results;
+
+    while( my $page = shift @page_list ) {
+        my $uri   = URI->new_abs( "/online.php?forumid=$forum_id&pagenumber=$page", $self->base_url );
+        my $res   = $self->mech->get( $uri );
+
+        if( !$res->is_success ) {
+            warn "Online user fetch failed! forum_id: $forum_id page: $page";                
+            return;
+        }
+        else {
+            my $scraped = $self->online_user_scraper->scrape( $res->decoded_content, $self->base_url );
+
+            # handle request for page = 0 aka all pages
+            if($page == 1 && $pages == 0) {
+                foreach my $page_num (2..$scraped->{page_info}->{last}) {
+                    push @page_list, $page_num;
+                }
+            }
+
+            push( @results, $scraped );
+        }
+    }
+
+    return \@results;
 }
 
 
