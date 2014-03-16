@@ -1,6 +1,7 @@
 use Modern::Perl;
 use Getopt::Long::Descriptive;
 use Number::Range;
+use Acme::Goatse;
 use lib '../lib';
 use SomethingAwful::Forums;
 
@@ -13,7 +14,7 @@ my ($opt, $usage) = describe_options(
     [ 'forum_id|f:i',   'forum_id to use',            { required => 1     }, ],
     [ 'recheck_after:i','Rerun every X seconds',                             ],
     [ 'message|m:s',    'message to post to each thread', { required => 1 }, ],
-    [ 'goatse',         'add goatse to your posts',                          ],    
+    [ 'goatse',         'add acsii goatse to your posts',                    ],    
     [],
     [ 'help', 'print usage message and exit'                                 ],
 );
@@ -24,7 +25,7 @@ if( $opt->help ) {
 
 my $message = $opt->message;
 if( $opt->goatse ) {
-    $message .= qw([img]http://www.goatse.info/hello.jpg[/img]);    
+    $message .= '[code]' . goatse() . '[/code]';    
 }
 
 say 'Starting...';
