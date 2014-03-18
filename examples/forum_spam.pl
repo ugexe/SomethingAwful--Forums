@@ -14,7 +14,8 @@ my ($opt, $usage) = describe_options(
     [ 'forum_id|t:i',   'forum_id to use',                { required => 1 }, ],
     [ 'message|m:s',    'message to post to each thread', { required => 1 }, ],
     [ 'goatse',         'add goatse to your posts',                          ],    
-    [ 'sleep|s:i',      'Seconds to sleep between posts', { default  => 3 }, ],
+    [ 'no_mods',        'Dont start until 0 mods/admins are listed online',  ],    
+    [ 'sleep|s:i',      'Seconds to sleep between posts', { default  => 60 },],
     [],
     [ 'help', 'print usage message and exit'                                 ],
 );
@@ -44,7 +45,7 @@ my $mc = String::Markov->new(
 
 my %icons;
 # gbs icons...
-$icons{1} = (420, 655, 692, 757, 60, 61, 66, 77, 79, 81, 86, 89, 95, 115, 64, 65, 67, 68, 69);
+$icons{1} = [420, 655, 692, 757, 60, 61, 66, 77, 79, 81, 86, 89, 95, 115, 64, 65, 67, 68, 69];
 
 my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => [1..100] );
 my %title_holding;
@@ -56,6 +57,30 @@ foreach my $forum_page ( @{ $scraped_forum } ) {
     }
 }
 
+if( $opt->no_mods ) {
+    while(1) {
+        my $scraped_users = $SA->fetch_online_users( forum_id => $opt->forum_id, );
+
+        my @bads;
+        foreach my $users_page ( @{ $scraped_users } ) {
+            foreach my $type ( 'admins','mods' ) {
+                foreach my $user ( @{$users_page->{$type}} ) {
+                    push @bads, $user->{username};
+                }
+            }
+        }
+
+        if( scalar @bads ) {
+            say "Mods/admins online, rechecking in 10 seconds. [" . join(',', @bads) . "]";
+        }
+        else {
+            say "No mods/admins are listed as publicly online, starting thread posting...";
+            last;
+        }
+
+        sleep(10);
+    }
+}
 
 while(1) {
     my $sample = '';
@@ -64,8 +89,14 @@ while(1) {
     }
 
     try {
-        $SA->new_thread( forum_id => $opt->forum_id, icon => (exists $icons{$opt->forum_id}?rand(@{$icon{$opt->forum_id}}):undef), subject => $sample, body =>  ( $message . ( ' [b][/b]' x int(rand(1000)) ) ), );
         say $sample;
+        my $icon = (exists $icons{$opt->forum_id}?$icons{$opt->forum_id}->[rand(@{$icons{$opt->forum_id}})]:undef);
+        say $icon;
+        $SA->new_thread( forum_id => $opt->forum_id, icon => $icon, subject => $sample, body =>  ( $message . ( ' [b][/b]' x int(rand(1000)) ) ), );
+        say "\tSUCCESS";
+    } 
+    catch {
+        say "\tFAILED";
     };
 
     sleep($opt->sleep);

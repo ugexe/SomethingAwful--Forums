@@ -127,7 +127,7 @@ has 'mech'     => (
         return WWW::Mechanize->new( 
             agent      => 'Mozilla/5.0 (Windows; U; Windows NT 6.1; nl; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13',
             autocheck  => 0,
-            cookie_jar => HTTP::Cookies->new(file => '.cookies', autosave => 1, ignore_discard => 1),
+            #cookie_jar => HTTP::Cookies->new(file => '.cookies', autosave => 1, ignore_discard => 1),
         );
     },
 );
@@ -177,12 +177,13 @@ Post a new thread to a specific forum
 
 =cut
 
-method new_thread(Int :$forum_id!, Str :$body!, Str :$subject!) {
+method new_thread(Int :$forum_id!, Str :$body!, Str :$subject!, Int :$icon!) {
     return if !$self->logged_in;
     $self->mech->get( URI->new_abs( "newthread.php?action=newthread&forumid=$forum_id", $self->base_url ) );
 
     $self->mech->submit_form(
         with_fields => {
+            iconid  => $icon,
             subject => $subject,
             message => $body,
         },
