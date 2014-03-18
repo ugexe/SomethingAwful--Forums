@@ -171,6 +171,26 @@ method login(Str :$username!, Str :$password!) {
 }
 
 
+=head2 new_thread( forum_id => $forum_id, body => $body )
+
+Post a new thread to a specific forum
+
+=cut
+
+method new_thread(Int :$forum_id!, Str :$body!, Str :$subject!) {
+    return if !$self->logged_in;
+    $self->mech->get( URI->new_abs( "newthread.php?action=newthread&forumid=$forum_id", $self->base_url ) );
+
+    $self->mech->submit_form(
+        with_fields => {
+            subject => $subject,
+            message => $body,
+        },
+    );
+}
+
+
+
 =head2 reply_to_thread ( thread_id => $thread_id, body => $body )
 
 Reply to a specific thread
