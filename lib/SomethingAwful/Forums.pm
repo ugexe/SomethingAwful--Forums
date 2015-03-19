@@ -55,7 +55,7 @@ Web::Scraper::LibXML scraper for scraping forum's index page.
 =cut
 
 has 'index_scraper' => ( 
-    isa     => 'Web::Scraper::LibXML', 
+    isa     => 'Web::Scraper', 
     is      => 'ro',
     default => sub { SomethingAwful::Forums::Scraper::Index->new; },
 );
@@ -68,7 +68,7 @@ Web::Scraper::LibXML scraper for scraping a specific forum.
 =cut
 
 has 'forum_scraper' => ( 
-    isa     => 'Web::Scraper::LibXML', 
+    isa     => 'Web::Scraper', 
     is      => 'ro',
     default => sub{ SomethingAwful::Forums::Scraper::Forum->new; },
 );
@@ -81,7 +81,7 @@ Web::Scraper::LibXML scraper for scraping specific thread.
 =cut
 
 has 'thread_scraper' => ( 
-    isa     => 'Web::Scraper::LibXML', 
+    isa     => 'Web::Scraper', 
     is      => 'ro',
     default => sub { SomethingAwful::Forums::Scraper::Thread->new; },
 );
@@ -94,7 +94,7 @@ Web::Scraper::LibXML scraper for scraping current online users for a specific fo
 =cut
 
 has 'online_user_scraper' => ( 
-    isa     => 'Web::Scraper::LibXML', 
+    isa     => 'Web::Scraper', 
     is      => 'ro',
     default => sub { SomethingAwful::Forums::Scraper::Users::Online->new; },
 );

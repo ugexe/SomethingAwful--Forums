@@ -25,7 +25,7 @@ if( $opt->help ) {
 
 my $message = $opt->message;
 if( $opt->goatse ) {
-    $message .= qw([img]http://www.goatse.info/hello.jpg[/img]);    
+    $message .= ("[img]http://www.goatse.info/hello.jpg[/img]\n" x 20);
 }
 
 my $SA = SomethingAwful::Forums->new;
@@ -41,7 +41,7 @@ while(1) {
     try {
         $SA->reply_to_thread( 
             thread_id => $opt->thread_id, 
-            body      => ( $message . ( ' [b][/b]' x int(rand(1000)) ) ), # add nonsense to bypass duplicate detection
+            body      => ( $message . ( ' [b] [/b]' x int(rand(100)) ) ), # add nonsense to bypass duplicate detection
         );
 
         state $counter++;

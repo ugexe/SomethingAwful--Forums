@@ -1,7 +1,6 @@
 package SomethingAwful::Forums::Scraper::Thread;
 use strict;
-use Web::Scraper::LibXML; # Web::Scraper also works, but slower
-require HTML::TreeBuilder::LibXML; # only needed for Web::Scraper::LibXML
+use Web::Scraper;
 
 our $VERSION = '0.01';
 

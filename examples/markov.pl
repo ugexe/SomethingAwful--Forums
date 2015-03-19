@@ -51,18 +51,18 @@ foreach my $thread_page ( @{ $scraped_thread } ) {
     }
 }
 
-my $sample = '';
-while( length($sample) < 10 ) {
-    $sample = $mc->generate_sample;
+while(1) {
+    sleep 3;
+    my $sample = '';
+    while( length($sample) < 10 ) {
+        $sample = $mc->generate_sample;
+    }
+
+    if( $opt->reply ) {
+        $SA->reply_to_thread( thread_id => $opt->thread_id, body => $sample );
+        say 'Reply made!'
+    }
 }
-
-say $sample;
-
-if( $opt->reply ) {
-    $SA->reply_to_thread( thread_id => $opt->thread_id, body => $sample );
-    say 'Reply made!'
-}
-
 
 1;
 

@@ -1,4 +1,5 @@
 use Modern::Perl;
+#use LWP::Protocol::Net::Curl;
 use Getopt::Long::Descriptive;
 use Number::Range;
 use lib '../lib';
