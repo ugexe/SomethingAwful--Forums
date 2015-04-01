@@ -1,7 +1,6 @@
 package SomethingAwful::Forums::Scraper::Forum;
 use strict;
 use Web::Scraper;
-require HTML::TreeBuilder::LibXML; # only needed for Web::Scraper::LibXML
 use Regexp::Common;
 
 our $VERSION = '0.01';
