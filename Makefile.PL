@@ -16,8 +16,7 @@ WriteMakefile (
     PREREQ_PM      => {
         'Web::Scraper'              => 0,
         'WWW::Mechanize'            => 0,
-        'Web::Scraper::LibXML'      => 0, # These 2 can be subbed out for just Web::Scraper
-        'HTML::TreeBuilder::LibXML' => 0, # but its slower. Figure out how to do this automatically.
+        'Web::Scraper'              => 0, 
         'Regexp::Common'            => 0,
         'Moose'                     => 0,
         'Method::Signatures'        => 0,
