@@ -50,7 +50,7 @@ See /examples folder.
 
 =head2 index_scraper
 
-Web::Scraper::LibXML scraper for scraping forum's index page.
+Web::Scraper scraper for scraping forum's index page.
 
 =cut
 
@@ -63,7 +63,7 @@ has 'index_scraper' => (
 
 =head2 forum_scraper
 
-Web::Scraper::LibXML scraper for scraping a specific forum.
+Web::Scraper scraper for scraping a specific forum.
 
 =cut
 
@@ -76,7 +76,7 @@ has 'forum_scraper' => (
 
 =head2 thread_scraper
 
-Web::Scraper::LibXML scraper for scraping specific thread.
+Web::Scraper scraper for scraping specific thread.
 
 =cut
 
@@ -89,7 +89,7 @@ has 'thread_scraper' => (
 
 =head2 online_user_scraper
 
-Web::Scraper::LibXML scraper for scraping current online users for a specific forum
+Web::Scraper scraper for scraping current online users for a specific forum
 
 =cut
 
@@ -119,6 +119,7 @@ has 'base_url' => (
 WWW::Mechanize object used internally to navigate web pages.
 
 =cut
+
 # TODO Make cookie file editable
 has 'mech'     => ( 
     isa     => 'WWW::Mechanize', 
@@ -127,7 +128,9 @@ has 'mech'     => (
         return WWW::Mechanize->new( 
             agent      => 'Mozilla/5.0 (Windows; U; Windows NT 6.1; nl; rv:1.9.2.13) Gecko/20101203 Firefox/3.6.13',
             autocheck  => 0,
-            #cookie_jar => HTTP::Cookies->new(file => '.cookies', autosave => 1, ignore_discard => 1),
+            cookie_jar => {},
+            # Use the below cookie jar instead for more... legit... usage
+            # cookie_jar => HTTP::Cookies->new(file => '.cookies', autosave => 1, ignore_discard => 1),
         );
     },
 );
@@ -180,14 +183,16 @@ Post a new thread to a specific forum
 method new_thread(Int :$forum_id!, Str :$body!, Str :$subject!, Int :$icon!) {
     return if !$self->logged_in;
     $self->mech->get( URI->new_abs( "newthread.php?action=newthread&forumid=$forum_id", $self->base_url ) );
-
-    $self->mech->submit_form(
-        with_fields => {
-            iconid  => $icon,
-            subject => $subject,
-            message => $body,
-        },
-    );
+open my $fh, '>', 'fart.txt';
+say {$fh} $self->mech->content;
+close $fh;
+    #$self->mech->submit_form(
+    #    with_fields => {
+    #        iconid  => $icon,
+    #        subject => $subject,
+    #        message => $body,
+    #    },
+    #);
 }
 
 

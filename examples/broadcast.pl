@@ -41,6 +41,7 @@ $SA->login(
 my @pages = Number::Range->new($opt->pages)->range;
 my $scraped_forum = $SA->fetch_threads( forum_id => $opt->forum_id, pages => \@pages );
 
+
 foreach my $forum_page ( @{ $scraped_forum } ) {
     foreach my $thread ( @{$forum_page->{threads}} ) {
         try {
