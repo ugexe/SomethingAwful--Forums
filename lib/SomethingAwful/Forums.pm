@@ -183,16 +183,14 @@ Post a new thread to a specific forum
 method new_thread(Int :$forum_id!, Str :$body!, Str :$subject!, Int :$icon!) {
     return if !$self->logged_in;
     $self->mech->get( URI->new_abs( "newthread.php?action=newthread&forumid=$forum_id", $self->base_url ) );
-open my $fh, '>', 'fart.txt';
-say {$fh} $self->mech->content;
-close $fh;
-    #$self->mech->submit_form(
-    #    with_fields => {
-    #        iconid  => $icon,
-    #        subject => $subject,
-    #        message => $body,
-    #    },
-    #);
+
+    $self->mech->submit_form(
+        with_fields => {
+            iconid  => $icon,
+            subject => $subject,
+            message => $body,
+        },
+    );
 }
 
 
