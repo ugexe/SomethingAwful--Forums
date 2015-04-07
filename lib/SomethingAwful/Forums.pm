@@ -63,7 +63,7 @@ has 'index_scraper' => (
 
 =head2 forum_scraper
 
-Web::Scraper scraper for scraping a specific forum.
+Web::Scraper for scraping a specific forum.
 
 =cut
 
@@ -76,7 +76,7 @@ has 'forum_scraper' => (
 
 =head2 thread_scraper
 
-Web::Scraper scraper for scraping specific thread.
+Web::Scraper for scraping specific thread.
 
 =cut
 
@@ -89,7 +89,7 @@ has 'thread_scraper' => (
 
 =head2 online_user_scraper
 
-Web::Scraper scraper for scraping current online users for a specific forum
+Web::Scraper for scraping current online users for a specific forum
 
 =cut
 
@@ -150,7 +150,9 @@ has 'logged_in' => (
 
 =head1 METHODS
 
-=head2 login ( username => $username, password => $password )
+=head2 login
+
+    $SA->login( username => $username, password => $password )
 
 Login to forums using passed credentials. 
 
@@ -173,7 +175,9 @@ method login(Str :$username!, Str :$password!) {
 }
 
 
-=head2 new_thread( forum_id => $forum_id, body => $body )
+=head2 new_thread
+
+    $SA->new_thread( forum_id => $forum_id, body => $body )
 
 Post a new thread to a specific forum
 
@@ -194,7 +198,9 @@ method new_thread(Int :$forum_id!, Str :$body!, Str :$subject!, Int :$icon!) {
 
 
 
-=head2 reply_to_thread ( thread_id => $thread_id, body => $body )
+=head2 reply_to_thread 
+
+    $SA->( thread_id => $thread_id, body => $body )
 
 Reply to a specific thread
 

@@ -20,6 +20,7 @@ SomethingAwful::Forums
         pages     => 1, 
     );
 
+    # view the data structure
     say Dumper( $scraped_thread ); 
 
     $SA->reply_to_thread( thread_id => 3343753, 'gas' );
@@ -32,18 +33,17 @@ See /examples folder.
 
 =head1 OBJECTS
 
-
 =head2 index_scraper
 
 Web::Scraper scraper for scraping forum's index page.
 
 =head2 forum_scraper
 
-Web::Scraper scraper for scraping a specific forum.
+Web::Scraper for scraping a specific forum.
 
 =head2 thread_scraper
 
-Web::Scraper scraper for scraping specific thread.
+Web::Scraper for scraping specific thread.
 
 =head2 base_url
 
@@ -55,31 +55,43 @@ WWW::Mechanize object used internally to navigate web pages.
 
 =head2 logged_in
 
-Returns 1 if it successfully logged in. 
+Returns 1 if it successfully logged in.
 
 =head1 METHODS
 
-=head2 login ( username => $username, password => $password )
+=head2 login 
+
+    $SA->login( username => $username, password => $password )
 
 Login to forums using passed credentials. 
 
-=head2 reply_to_thread ( thread_id => $thread_id, body => $body )
+=head2 reply_to_thread
+
+    $SA->reply_to_thread( thread_id => $thread_id, body => $body )
 
 Reply to a specific thread
 
-=head2 reply_to_post ( post_id => $post_id, body => $body )
+=head2 reply_to_post
+
+    $SA->reply_to_post( post_id => $post_id, body => $body )
 
 Reply to a specific post.
 
 =head2 fetch_forums
 
+    $SA->fetch_forums
+
 Return a hashref representing the scraped forum index.
 
-=head2 fetch_threads ( forum_id => $forum_id, pages => [1,2] )
+=head2 fetch_threads
+
+    $SA->fetch_threads( forum_id => $forum_id, pages => [1,2] )
 
 Return a hashref repsenting the threads scraped from the supplied pages of the supplied forum id.
 
-=head2 fetch_posts ( thread_id => $forum_id, pages => [1,2] )
+=head2 fetch_posts
+
+    $SA->fetch_posts( thread_id => $forum_id, pages => [1,2] )
 
 Return a hashref repsenting the posts scraped from the supplied pages of the supplied thread id.
 
