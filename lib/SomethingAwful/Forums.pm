@@ -45,8 +45,12 @@ Scrape and post to the SomethingAwful.com forums.
 
 See /examples folder.
 
-=head1 OBJECTS
+=head1 INSTALLATION
 
+    # install everything needed by the SomethingAwful::Forums module + examples
+    cpanm --with-recommends git://github.com/ugexe/SomethingAwful--Forums.git
+
+=head1 OBJECTS
 
 =head2 index_scraper
 
