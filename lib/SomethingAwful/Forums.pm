@@ -100,7 +100,6 @@ has 'online_user_scraper' => (
 );
 
 
-
 =head2 base_url
 
 Contains the URL of the forum index. Allows use of an IP address if DNS fails to resolve.

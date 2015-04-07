@@ -26,7 +26,7 @@ SomethingAwful::Forums
 
 =head1 DESCRIPTION
 
-Scrape and post to the SomethingAwful.com forums.
+Scrape and post to the forums.SomethingAwful.com forums.
 
 See /examples folder.
 
@@ -35,15 +35,15 @@ See /examples folder.
 
 =head2 index_scraper
 
-Web::Scraper::LibXML scraper for scraping forum's index page.
+Web::Scraper scraper for scraping forum's index page.
 
 =head2 forum_scraper
 
-Web::Scraper::LibXML scraper for scraping a specific forum.
+Web::Scraper scraper for scraping a specific forum.
 
 =head2 thread_scraper
 
-Web::Scraper::LibXML scraper for scraping specific thread.
+Web::Scraper scraper for scraping specific thread.
 
 =head2 base_url
 
