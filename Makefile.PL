@@ -8,8 +8,8 @@ my $bugs = 'https://github.com/ugexe/SomethingAwful--Forums/issues';
  
 WriteMakefile (  
     NAME           => 'SomethingAwful::Forums',
-    VERSION_FROM   => $pm, 
-    ABSTRACT_FROM  => $pm,
+    VERSION        => '0.01', 
+    ABSTRACT       => 'somethingawful.com toolkit for scraping and automated posting ',
     AUTHOR         => '<ugexe@cpan.org>',
     LICENSE        => 'perl',
     MIN_PERL_VERSION => '5.014',
@@ -38,7 +38,7 @@ WriteMakefile (
     META_MERGE => {
         resources => {
             repository => $repo, 
-            bugtracker => "$bugs",
+            bugtracker => $bugs,
         },
         provides => {
             'SomethingAwful::Forums::Scraper::Index' => {
