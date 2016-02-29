@@ -29,7 +29,7 @@ WriteMakefile (
         'Getopt::Long::Descriptive' => 0,
         'Number::Range'             => 0,
         'Acme::Goatse'              => 0,
-        'Text::Markov'              => 0,
+        'String::Markov'            => 0,
         'Try::Tiny'                 => 0,
     },
     BUILD_REQUIRES => {
