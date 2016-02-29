@@ -27,7 +27,7 @@ sub new {
                 process '//select//option[@selected]', 
                     current => 'TEXT';
             };        
-        process '//tr[@class="thread"]', 
+        process '//tr[contains(@class,"thread")]',
             'threads[]' => scraper {
                 process '//td[@class="star"]', 
                     star      => 'TEXT';
